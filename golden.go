@@ -60,6 +60,33 @@ func toGildImage(t *testing.T, threshold float64, value image.Image) {
 		return
 	}
 
+	isIdenticalByBounds := hikaku.CompareByParams(prevSnapshot, value)
+
+	if !isIdenticalByBounds {
+		if shouldUpdate {
+			if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+				t.Error(err)
+				return
+			}
+
+			err := saveSnapshot(testID, goldenPath, value)
+			cleanDiffPath(buildPath(diffPath, testID))
+
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			t.Log("› Snapshot updated.\n")
+			return
+		}
+
+		prevBounds := prevSnapshot.Bounds().Max
+		valueBounds := value.Bounds().Max
+		t.Error(fmt.Sprintf("• Images' shapes are different. \n\tOriginal is %dx%d\n\tNew is %dx%d", prevBounds.X, prevBounds.Y, valueBounds.X, valueBounds.Y))
+		return
+	}
+
 	params := hikaku.ComparisonParameters{Threshold: threshold, BinsCount: 32}
 
 	goldenHist := hikaku.PrepareHistogram(prevSnapshot, params)
@@ -71,7 +98,7 @@ func toGildImage(t *testing.T, threshold float64, value image.Image) {
 	isIdentical, diff := hikaku.CompareHistogramsOnly(params)
 
 	if isIdentical {
-		cleanDiffPath(diffPath + "." + testID + ".png")
+		cleanDiffPath(buildPath(diffPath, testID))
 		return
 	}
 
@@ -82,7 +109,7 @@ func toGildImage(t *testing.T, threshold float64, value image.Image) {
 		}
 
 		err := saveSnapshot(testID, goldenPath, value)
-		cleanDiffPath(diffPath + "." + testID + ".png")
+		cleanDiffPath(buildPath(diffPath, testID))
 		if err != nil {
 			t.Error(err)
 			return
@@ -106,7 +133,7 @@ func toGildImage(t *testing.T, threshold float64, value image.Image) {
 		return
 	}
 
-	t.Error(fmt.Sprintf("• Found diff: %F. \n\tHighlights are stored at %s.%s.png\n", diff, diffPath, testID))
+	t.Error(fmt.Sprintf("• Found diff: %F. \n\tHighlights are stored at %s.\n", diff, buildPath(diffPath, testID)))
 }
 
 func getPaths(folder string) (dir, goldenPath string) {

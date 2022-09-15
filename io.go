@@ -8,7 +8,7 @@ import (
 )
 
 func saveSnapshot(testID, snapPath string, img image.Image) error {
-	pathToFile, err := filepath.Abs(snapPath + "." + testID + ".png")
+	pathToFile, err := filepath.Abs(buildPath(snapPath, testID))
 
 	f, _ := os.Create(pathToFile)
 	err = png.Encode(f, img)
@@ -20,7 +20,7 @@ func saveSnapshot(testID, snapPath string, img image.Image) error {
 }
 
 func getPrevSnapshot(testID, snapPath string) (image.Image, error) {
-	pathToFile, err := filepath.Abs(snapPath + "." + testID + ".png")
+	pathToFile, err := filepath.Abs(buildPath(snapPath, testID))
 	file, err := os.Open(pathToFile)
 	if err != nil {
 		return nil, err

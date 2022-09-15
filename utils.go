@@ -81,3 +81,7 @@ func getEnvBool(variable string, fallback bool) bool {
 
 	return e == "true"
 }
+
+func buildPath(diffPath string, testID string) string {
+	return diffPath + "." + testID + ".png"
+}
