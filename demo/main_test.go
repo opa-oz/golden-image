@@ -18,6 +18,10 @@ func TestGet(t *testing.T) {
 		return
 	}
 
-	goldenImage.ToGildImage(t, 0.02, golden)
-	goldenImage.ToGildImage(t, 0.02, copper)
+	t.Run("should compare golden to golden", func(t *testing.T) {
+		goldenImage.ToGildImage(t, 0.02, golden)
+	})
+	t.Run("should compare copper to copper", func(t *testing.T) {
+		goldenImage.ToGildImage(t, 0.02, copper)
+	})
 }

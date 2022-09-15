@@ -2,6 +2,7 @@ package golden_image
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 )
 
@@ -19,6 +20,7 @@ type SyncRegistry struct {
 // Form [<test-name> - <occurrence>]
 func (s *SyncRegistry) getTestID(tName, snapPath string) string {
 	occurrence := 1
+	tName = strings.Replace(tName, "/", "-", 10)
 	s.Lock()
 
 	if _, exists := s.values[snapPath]; !exists {
@@ -32,7 +34,7 @@ func (s *SyncRegistry) getTestID(tName, snapPath string) string {
 	s.values[snapPath][tName] = occurrence
 	s.Unlock()
 
-	return fmt.Sprintf("[%s%04d]", tName, occurrence)
+	return fmt.Sprintf("[%s-%04d]", tName, occurrence)
 }
 
 type SyncSlice struct {

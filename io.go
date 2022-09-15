@@ -21,6 +21,7 @@ func saveSnapshot(testID, snapPath string, img image.Image) error {
 
 func getPrevSnapshot(testID, snapPath string) (image.Image, error) {
 	pathToFile, err := filepath.Abs(buildPath(snapPath, testID))
+	println(pathToFile)
 	file, err := os.Open(pathToFile)
 	if err != nil {
 		return nil, err
