@@ -40,11 +40,11 @@ func TestGet(t *testing.T) {
     }
     
     t.Run("should compare first to first", func (t *testing.T) {
-        goldenImage.ToGildImage(t, 0.02, golden) // compare image to gilded one, or gild if it's not existing yet
+        goldenImage.ToGildImage(t, 0.02, firstImage) // compare image to gilded one, or gild if it's not existing yet
     })
     
     t.Run("should compare second to second", func (t *testing.T) {
-        goldenImage.ToGildImage(t, 0.02, copper)
+        goldenImage.ToMatchSnapshot(t, 0.02, secondImage) // you can also use alias `ToMatchSnapshot`
     })
 }
 ```
