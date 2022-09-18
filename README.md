@@ -44,7 +44,7 @@ func TestGet(t *testing.T) {
     })
     
     t.Run("should compare second to second", func (t *testing.T) {
-        goldenImage.ToGildImage(t, 0.02, copper)
+        goldenImage.ToMatchSnapshot(t, 0.02, copper) // you can also use alisa `ToMatchSnapshot`
     })
 }
 ```

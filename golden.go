@@ -30,6 +30,19 @@ func ToGildImage(t *testing.T, threshold float64, values ...image.Image) {
 	}
 }
 
+func ToMatchSnapshot(t *testing.T, threshold float64, values ...image.Image) {
+	t.Helper()
+
+	if len(values) == 0 {
+		t.Log("[Warning] ToMatchSnapshot called without params")
+		return
+	}
+
+	for _, img := range values {
+		toGildImage(t, threshold, img)
+	}
+}
+
 func toGildImage(t *testing.T, threshold float64, value image.Image) {
 	t.Helper()
 
